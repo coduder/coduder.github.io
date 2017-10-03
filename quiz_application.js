@@ -22,6 +22,7 @@ var allQuestions = [{
     }
 ];
 
+
 /**
  * Main Page Function
  */
@@ -43,11 +44,12 @@ $(document).ready(function() {
     var tally = 0; //user correct score tally
 
     //Grab necessary DOM objects
-    var quizPanel = $("#quiz_panel"); //main quiz display div
-    var landingPage = $("#landing_page"); //starting page div
-    var endingPage = $("#ending_page"); //ending page div
-    var doc_question = $("#question"); //question text element
-    var choices_list = $("#choices"); //<ul> wrapping choice radio btns
+    var $quizPanel = $("#quiz_panel"); //main quiz display div
+    var $questionPanel = $("#question_panel");
+    var $landingPage = $("#landing_page"); //starting page div
+    var $endingPage = $("#ending_page"); //ending page div
+    //var $docQuestion = $("#question"); //question text element
+    //var $choicesList = $("#choices"); //<ul> wrapping choice radio btns
 
     //Start with landingPage shown
     initPage();
@@ -57,9 +59,8 @@ $(document).ready(function() {
      * Start quiz, hide landingPage show quizPanel
      */
     $("#start_btn").on("click", function() {
-        landingPage.hide();
-        quizPanel.show();
-        clearQuestions();
+        $landingPage.hide();
+        $quizPanel.show();
         loadQuestion(allQuestions[currQIndex]);
     });
 
@@ -80,7 +81,6 @@ $(document).ready(function() {
         }
 
         //Load next set of quesitons
-        clearQuestions();
         loadQuestion(allQuestions[currQIndex]);
     });
 
@@ -97,7 +97,6 @@ $(document).ready(function() {
             currQIndex = 0;
         }
 
-        clearQuestions();
         loadQuestion(allQuestions[currQIndex]);
 
     });
@@ -126,48 +125,93 @@ $(document).ready(function() {
         currQIndex = 0;
         tally = 0;
 
-        quizPanel.hide();
-        endingPage.hide();
-        landingPage.show();
+        $quizPanel.hide();
+        $endingPage.hide();
+        $landingPage.show();
     }
 
 
     /**
      * Load next question onto page with all choices, if accessed via back tracking, the users previous choice
-     * is shown as checked
+     * is shown as checked, otherwise the top option is checked
      * 
      * @param {Object} currQuestion - current question object (normally allQuestions[currQIndex])
      */
     function loadQuestion(currQuestion) {
+        //Check for existence of question on DOM
+        var $questionToLoad = $("#Q_" + currQIndex + "_div");
 
-        //Set new question heading text
-        doc_question.text(currQuestion.questionText);
+        //question not found, make it and show it
+        if ($questionToLoad.val() == undefined) {
 
-        //Add all question choices as li wrapped input elements on the <ul>
-        //THIS IS BAD, SHOULD NOT BE REMAKING QUESTIONS EVERYTIME loadQuestion IS CALLED ON BACK TRACKING
-        for (var j = 0, len2 = currQuestion.choices.length; j < len2; j++) {
-            var li = makeQuestionLI(currQIndex, j, true, "radio", currQuestion.choices[j], currQuestion.name);
-            choices_list.append(li);
+            var qDiv = makeQuestionDiv(currQuestion);
+            var justMade = true;
+            showQuestion(qDiv, justMade);
+
+        }
+        //quesiton is found, show it
+        else {
+
+            showQuestion($questionToLoad);
+
         }
 
-        var uChoice = allQuestions[currQIndex].userChoice;
-        if (uChoice > -1) {
+        //ALways ensure an option is checked when the question is viewed, if this is a first time view, check the top option,
+        //otherwise check users previous option
+        var uChoice = currQuestion.userChoice;
+        if (uChoice == -1) {
+            $("#radio" + currQIndex + "_0").prop("checked", true);
+        } else {
             $("#radio" + currQIndex + "_" + uChoice).prop("checked", true);
         }
-
     }
 
+    /**
+     * Constructs a div enclosing a questions main text and an <ul> of radio button selections.
+     * 
+     * @param {Object} currQuestion -Current question object to construct question div
+     * @return {HTMLElement:div}            -the question div
+     */
+    function makeQuestionDiv(currQuestion) {
+        //Make div
+        var DIV_question = document.createElement("div");
+        DIV_question.id = "Q_" + currQIndex + "_div";
+        DIV_question.classList.add("question_div"); //to apply uniform styling
+
+        //make question text
+        var P_questionText = document.createElement("p");
+        P_questionText.id = "Q_" + currQIndex + "_text";
+        P_questionText.classList.add("question_text");
+        P_questionText.innerHTML = currQuestion.questionText;
+
+        //make UL to store radio options
+        var UL_choices = document.createElement("ul");
+        UL_choices.id = "Q_" + currQIndex + "_choices";
+        UL_choices.classList.add("question_choices");
+
+        //populate UL with radio options
+        for (var j = 0, len2 = currQuestion.choices.length; j < len2; j++) {
+            var li = makeQuestionLI(currQIndex, j, true, "radio", currQuestion.choices[j], currQuestion.name);
+            UL_choices.appendChild(li);
+        }
+
+        //append UL & text to div
+        DIV_question.appendChild(P_questionText);
+        DIV_question.appendChild(UL_choices);
+
+        return DIV_question;
+    }
 
     /**
      * Construct and return a question LI to insert into quiz
      * 
-     * @param {Number} qIndex - current question index 
-     * @param {Number} idNum - current choice number
-     * @param {Boolean} required - should this be a required option
+     * @param {Number} qIndex       - current question index 
+     * @param {Number} idNum        - current choice number
+     * @param {Boolean} required    - should this be a required option
      * @param {String}  type 
      * @param {String}  value
-     * @param {String}  name - for grouping radiobuttons
-     * @return {Object} a LI DOM object with input object embedded
+     * @param {String}  name        - for grouping radiobuttons
+     * @return {HTMLElement:li}            -a LI DOM object with input object embedded
      */
     function makeQuestionLI(qIndex, idNum, required, type, value, name) {
         var li = document.createElement("LI");
@@ -183,11 +227,6 @@ $(document).ready(function() {
         }
         input.required = required; //doesn"t do anyting yet because next button is not Submit
 
-        //ensures first radio button choice always defaults to checked
-        if (type == "radio") {
-            input.checked = (idNum === 0) ? true : false;
-        }
-
         //create label for input
         var label = document.createTextNode(value);
 
@@ -200,41 +239,54 @@ $(document).ready(function() {
     }
 
     /**
-     * Validate current user choices of question and update tally
+     * Only shows question div specified by showQuestion and hides all others, assumes that newly created questions 
+     * will be sent in form of document elements and questions that existed already will be jquery objects
+     * 
+     * @param {HTMLElement:div} questionToShow -A div containing the question text and choices to show
+     * @param {Boolean} questionJustCreated    -Indcator if this question has just being created
+     */
+    function showQuestion(questionToShow, questionJustCreated) {
+
+        //hide all current children
+        $questionPanel.children().hide();
+
+        //append new question to panel and thus show it
+        if (questionJustCreated) {
+            $questionPanel.append(questionToShow);
+        } else {
+            questionToShow.show();
+        }
+
+    }
+
+    /**
+     * Update current user choice in allQuestions[currQIndex] array object, validate user choice and update tally
      * 
      * @param {Object} currQuestion - current question object from allQuestions array
      */
     function updateUserChoiceAndTally(currQuestion) {
-        //Grab indexOf users selection from DOM <ul> of question choices
-        var newUserSelection = currQuestion.choices.indexOf($("input:checked", "#quiz_form").val());
+        //Grab value of users selection from current question div
+        var newChoice = currQuestion.choices.indexOf($("input:checked", "#Q_" + currQIndex + "_choices").val());
         var oldChoice = currQuestion.userChoice;
         var correct = currQuestion.correctAnswer;
 
         //First time a user has come upon this question
         if (oldChoice == -1) {
-            if (newUserSelection === correct) {
+            if (newChoice == correct) {
                 tally++;
             }
 
         } else {
             //Thereafter, Only need to update tally if one choice was correct and another wasn't
-            if ((oldChoice != correct) && (newUserSelection == correct)) {
+            if ((oldChoice != correct) && (newChoice == correct)) {
                 tally++;
-            } else if ((oldChoice == correct) && (newUserSelection != correct)) {
+            } else if ((oldChoice == correct) && (newChoice != correct)) {
                 tally--;
             }
         }
 
-
-        //always update userChoice
-        currQuestion.userChoice = newUserSelection;
-    }
-
-    /**
-     * clear current choices options
-     */
-    function clearQuestions() {
-        choices_list.empty();
+        //always update userChoice on object
+        currQuestion.userChoice = newChoice;
     }
 
     /**
@@ -244,7 +296,7 @@ $(document).ready(function() {
         //Tallied score display construction
         $("#display_score_text").text("Your score is " + tally);
 
-        quizPanel.hide();
-        endingPage.show();
+        $quizPanel.hide();
+        $endingPage.show();
     }
 });
