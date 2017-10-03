@@ -27,16 +27,6 @@ var allQuestions = [{
  * Main Page Function
  */
 //<<<<<<<<<<<TODO>>>>>>>>>>>
-//DONE 1) Set up previous question button functionality 
-//DONE 2) Figure out a way to store a users answer
-//DONE  -Maybe update the allQuestions array to store users seleciton
-//TODO  -Maybe create another array of individual question divs so they can just be 
-//          created if they don't exist, or hidden if moving forward instead of deleting
-//          and loading the choices UL for every change
-//          +This would make storage of choice and display faster probably
-//TODO 3) GO TO NEXT QUESTION AND TRY TO IMPLEMENT PROPER BACK TRACKED RADIO CHECKING 
-//          for users answers that occurred already, may need to uncheck other answers first
-//          the jquery is probably messed up too
 
 $(document).ready(function() {
     //Global javascript variables
@@ -48,14 +38,13 @@ $(document).ready(function() {
     var $questionPanel = $("#question_panel");
     var $landingPage = $("#landing_page"); //starting page div
     var $endingPage = $("#ending_page"); //ending page div
-    //var $docQuestion = $("#question"); //question text element
-    //var $choicesList = $("#choices"); //<ul> wrapping choice radio btns
 
     //Start with landingPage shown
     initPage();
 
 
     /**
+     * EVENT HANDLER
      * Start quiz, hide landingPage show quizPanel
      */
     $("#start_btn").on("click", function() {
@@ -66,6 +55,7 @@ $(document).ready(function() {
 
 
     /**
+     * EVENT HANDLER
      * Handle next question button transition set up
      */
     $("#next_question_btn").on("click", function() {
@@ -85,6 +75,7 @@ $(document).ready(function() {
     });
 
     /**
+     * EVENT HANDLER
      * Handle prev question button transition set up
      */
     $("#prev_question_btn").on("click", function() {
@@ -102,6 +93,7 @@ $(document).ready(function() {
     });
 
     /**
+     * EVENT HANDLER
      * Restarts quiz from scratch WITHOUT saving answers
      */
     $("#restart_btn").on("click", function() {
