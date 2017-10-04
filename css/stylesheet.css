@@ -1,2 +1,45 @@
+/*DOM OBJECTS*/
+
+body {
+    background-color: #FECEA8;
+}
 
 
+/*BOOTSTRAP CLASSES*/
+
+.card {
+    width: 30rem;
+}
+
+
+/*MY CLASSES*/
+
+.page_center {
+    margin: auto;
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 40px;
+    min-width: 1200px;
+    height: 50%;
+    width: 70%;
+}
+
+.main_text {
+    color: #f75d2a;
+    text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
+    font-family: Lobster;
+}
+
+.question_text {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#quiz_panel {
+    background-color: #F3F2F2;
+    border-color: #FF8A66;
+    border-width: 0.5em;
+}

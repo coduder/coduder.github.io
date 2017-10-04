@@ -19,6 +19,13 @@ var allQuestions = [{
         choices: ["Riley", "Hillary", "Dillary", "Rodham", "Regis"],
         correctAnswer: 3,
         userChoice: -1
+    },
+    {
+        questionText: "What kind of shark has Forest scuba dived with?",
+        name: "shark",
+        choices: ["Great White", "Tiger", "Thresher", "Hammer Head"],
+        correctAnswer: 2,
+        userChoice: -1
     }
 ];
 
@@ -26,8 +33,6 @@ var allQuestions = [{
 /**
  * Main Page Function
  */
-//<<<<<<<<<<<TODO>>>>>>>>>>>
-
 $(document).ready(function() {
     //Global javascript variables
     var currQIndex = 0; //index of current question in Viewport
@@ -35,9 +40,11 @@ $(document).ready(function() {
 
     //Grab necessary DOM objects
     var $quizPanel = $("#quiz_panel"); //main quiz display div
-    var $questionPanel = $("#question_panel");
-    var $landingPage = $("#landing_page"); //starting page div
-    var $endingPage = $("#ending_page"); //ending page div
+    var $questionPanel = $("#question_panel"); //container used for display properties of all question divs
+    var $landingPanel = $("#landing_panel"); //starting page div
+    var $endingPanel = $("#ending_panel"); //ending page div
+    var $prevButton = $("#prev_question_btn");
+    var $nextButton = $("#next_question_btn");
 
     //Start with landingPage shown
     initPage();
@@ -47,8 +54,8 @@ $(document).ready(function() {
      * EVENT HANDLER
      * Start quiz, hide landingPage show quizPanel
      */
-    $("#start_btn").on("click", function() {
-        $landingPage.hide();
+    $("#start_btn").click(function() {
+        $landingPanel.hide();
         $quizPanel.show();
         loadQuestion(allQuestions[currQIndex]);
     });
@@ -58,8 +65,7 @@ $(document).ready(function() {
      * EVENT HANDLER
      * Handle next question button transition set up
      */
-    $("#next_question_btn").on("click", function() {
-
+    $("#next_question_btn").click(function() {
         updateUserChoiceAndTally(allQuestions[currQIndex]);
 
         //increment current question to next
@@ -78,7 +84,7 @@ $(document).ready(function() {
      * EVENT HANDLER
      * Handle prev question button transition set up
      */
-    $("#prev_question_btn").on("click", function() {
+    $("#prev_question_btn").click(function() {
         updateUserChoiceAndTally(allQuestions[currQIndex]);
 
         currQIndex--;
@@ -96,7 +102,7 @@ $(document).ready(function() {
      * EVENT HANDLER
      * Restarts quiz from scratch WITHOUT saving answers
      */
-    $("#restart_btn").on("click", function() {
+    $("#restart_btn").click(function() {
         var i,
             len;
 
@@ -118,8 +124,8 @@ $(document).ready(function() {
         tally = 0;
 
         $quizPanel.hide();
-        $endingPage.hide();
-        $landingPage.show();
+        $endingPanel.hide();
+        $landingPanel.show();
     }
 
 
@@ -130,32 +136,37 @@ $(document).ready(function() {
      * @param {Object} currQuestion - current question object (normally allQuestions[currQIndex])
      */
     function loadQuestion(currQuestion) {
+        //Update prev/next buttons based on location in quiz
+        //Disable prev button at first question
+        if (currQIndex == 0) {
+            $prevButton.prop("disabled", true);
+        }
+        //Indicate end of quiz
+        else if (currQIndex === allQuestions.length - 1) {
+            $nextButton.text("Finish Quiz");
+        }
+        //Default behavior
+        else {
+            $prevButton.prop("disabled", false);
+            $nextButton.text("Next Question");
+        }
+
         //Check for existence of question on DOM
         var $questionToLoad = $("#Q_" + currQIndex + "_div");
 
         //question not found, make it and show it
         if ($questionToLoad.val() == undefined) {
-
             var qDiv = makeQuestionDiv(currQuestion);
             var justMade = true;
             showQuestion(qDiv, justMade);
-
         }
         //quesiton is found, show it
         else {
-
             showQuestion($questionToLoad);
-
         }
 
-        //ALways ensure an option is checked when the question is viewed, if this is a first time view, check the top option,
-        //otherwise check users previous option
-        var uChoice = currQuestion.userChoice;
-        if (uChoice == -1) {
-            $("#radio" + currQIndex + "_0").prop("checked", true);
-        } else {
-            $("#radio" + currQIndex + "_" + uChoice).prop("checked", true);
-        }
+        //ALways ensure an option is checked when the question is viewed
+        checkUserChoiceAndFocus(currQuestion);
     }
 
     /**
@@ -169,22 +180,26 @@ $(document).ready(function() {
         var DIV_question = document.createElement("div");
         DIV_question.id = "Q_" + currQIndex + "_div";
         DIV_question.classList.add("question_div"); //to apply uniform styling
+        DIV_question.classList.add("col"); //Boot strap col Sizing and styling
 
         //make question text
         var P_questionText = document.createElement("p");
         P_questionText.id = "Q_" + currQIndex + "_text";
         P_questionText.classList.add("question_text");
+        P_questionText.classList.add("card-title"); //Bootstrap card title
         P_questionText.innerHTML = currQuestion.questionText;
 
         //make UL to store radio options
         var UL_choices = document.createElement("ul");
         UL_choices.id = "Q_" + currQIndex + "_choices";
         UL_choices.classList.add("question_choices");
+        UL_choices.classList.add("list-group"); //Bootstrap
+        UL_choices.classList.add("list-group-flush"); //Bootstrap
 
         //populate UL with radio options
         for (var j = 0, len2 = currQuestion.choices.length; j < len2; j++) {
-            var li = makeQuestionLI(currQIndex, j, true, "radio", currQuestion.choices[j], currQuestion.name);
-            UL_choices.appendChild(li);
+            var newInputChoice = makeQuestionChoice(currQIndex, j, true, "radio", currQuestion.choices[j], currQuestion.name);
+            UL_choices.appendChild(newInputChoice);
         }
 
         //append UL & text to div
@@ -205,29 +220,34 @@ $(document).ready(function() {
      * @param {String}  name        - for grouping radiobuttons
      * @return {HTMLElement:li}            -a LI DOM object with input object embedded
      */
-    function makeQuestionLI(qIndex, idNum, required, type, value, name) {
-        var li = document.createElement("LI");
-        li.id = "li_" + qIndex + "_" + idNum;
+    function makeQuestionChoice(qIndex, idNum, required, type, value, name) {
 
-        //construct new input element 
-        var input = document.createElement("input");
-        input.id = type + qIndex + "_" + idNum;
-        input.type = type;
-        input.value = value;
+        //Elements necessary for Funky Bootstrap input structure
+        var formCheck = document.createElement("div");
+        formCheck.classList.add("form-check");
+        var formCheckLabel = document.createElement("LABEL");
+        formCheckLabel.classList.add("form-check-label");
+
+        //Construct new input element
+        var formCheckInput = document.createElement("input");
+        formCheckInput.classList.add("form-check-input");
+        formCheckInput.id = type + qIndex + "_" + idNum;
+        formCheckInput.type = type;
+        formCheckInput.value = value;
         if (name) {
-            input.name = name;
+            formCheckInput.name = name;
         }
-        input.required = required; //doesn"t do anyting yet because next button is not Submit
+        formCheckInput.required = required; //doesn't do anyting yet because next button is not Submit
 
-        //create label for input
-        var label = document.createTextNode(value);
 
-        //construct LI element
-        li.appendChild(input);
-        li.appendChild(label);
+        var labelText = document.createElement("SPAN");
+        labelText.innerHTML = value;
+        //properly nest all elements in bootstrap format before return
+        formCheckLabel.appendChild(formCheckInput);
+        formCheckLabel.appendChild(labelText);
+        formCheck.appendChild(formCheckLabel);
 
-        return li;
-
+        return formCheck;
     }
 
     /**
@@ -249,6 +269,28 @@ $(document).ready(function() {
             questionToShow.show();
         }
 
+    }
+
+
+    /**
+     * Ensures that, when a new question is loaded, that either the default
+     * option or previous user selection is selected and has focus
+     * 
+     * @param {Object} currQuestion -current question object to act on
+     */
+    function checkUserChoiceAndFocus(currQuestion) {
+        var uChoice = currQuestion.userChoice,
+            checkedRadio;
+
+        if (uChoice == -1) {
+            checkedRadio = $("#radio" + currQIndex + "_0");
+            checkedRadio.prop("checked", true);
+            checkedRadio.focus();
+        } else {
+            checkedRadio = $("#radio" + currQIndex + "_" + uChoice);
+            checkedRadio.prop("checked", true);
+            checkedRadio.focus();
+        }
     }
 
     /**
@@ -289,6 +331,6 @@ $(document).ready(function() {
         $("#display_score_text").text("Your score is " + tally);
 
         $quizPanel.hide();
-        $endingPage.show();
+        $endingPanel.show();
     }
 });

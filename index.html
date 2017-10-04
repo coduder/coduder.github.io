@@ -3,34 +3,48 @@
 
 <head>
     <title>Forest's Quiz</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/stylesheet.css" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster" />
 </head>
 
 <body>
-    <div id="landing_page">
-        <h1>Welcome to Forest's Quiz</h1>
-        <input type="button" id="start_btn" value="Start">
-    </div>
-    <div id="quiz_panel">
-        <form method="post" id="quiz_form">
-            <!--This Div houses all question divs /-->
-            <div id="question_panel">
+    <div class="container">
+        <div class="row justify-content-center page_center">
+            <div class="col-sm-6 text-center " id="landing_panel">
+                <h1 class="display-1 main_text">Welcome to Forest's Quiz</h1>
+                <button type="button" class="btn btn-primary btn-lg" id="start_btn">Start</button>
             </div>
-            <input type="button" id="prev_question_btn" value="Prev Question">
-            <input type="button" id="next_question_btn" value="Next Question">
-        </form>
+            <div class="card" id="quiz_panel">
+                <div class="card-body">
+                    <form method="post" id="quiz_form">
+                        <!--This Div houses all question divs /-->
+                        <div id="question_panel">
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer btn-group">
+                    <button type="button" class="btn btn-secondary" id="prev_question_btn">Prev Question</button>
+                    <button type="button" class="btn btn-primary" id="next_question_btn">Next Question</button>
+                </div>
+            </div>
+            <div class="col-sm-6 text-center" id="ending_panel">
+                <p>End</p>
+                <h1 id="display_score_text"></h1>
+                <button type="button" class="btn btn-primary btn-lg" id="restart_btn">Start Quiz Over</button>
+            </div>
+        </div>
     </div>
-    <div id="ending_page">
-        <p>End</p>
-        <h1 id="display_score_text"></h1>
-        <input type="button" id="restart_btn" value="Start Quiz Over">
-    </div>
 
 
-    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="js/quiz_application.js"></script>
-
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/quiz_application.js"></script>
 </body>
 
 </html>
