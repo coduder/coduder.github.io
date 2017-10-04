@@ -30,7 +30,7 @@ body {
 .main_text {
     color: #f75d2a;
     text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
-    font-family: Lobster;
+    font-family: "Lobster", "Bookman";
 }
 
 .question_text {
