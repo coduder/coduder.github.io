@@ -30,7 +30,7 @@ body {
 .main_text {
     color: #f75d2a;
     text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
-    font-family: "Lobster", cursive, "Bookman", Courier New, Courier, monospace;
+    font-family: "Lobster", Georgia, cursive, "Bookman", Courier New, Courier, monospace;
 }
 
 .question_text {
