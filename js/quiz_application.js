@@ -46,7 +46,7 @@ $(document).ready(function() {
     var $prevButton = $("#prev_question_btn");
     var $nextButton = $("#next_question_btn");
 
-    //Start with landingPage shown
+    //LOAD START PAGE
     initPage();
 
 
@@ -138,6 +138,7 @@ $(document).ready(function() {
     function loadQuestion(currQuestion) {
         //Update prev/next buttons based on location in quiz
         //Disable prev button at first question
+        //REFACTOR THIS \/ \/ \/ INTO FUNCTION
         if (currQIndex == 0) {
             $prevButton.prop("disabled", true);
         }
@@ -150,6 +151,8 @@ $(document).ready(function() {
             $prevButton.prop("disabled", false);
             $nextButton.text("Next Question");
         }
+        // /\ /\ /\
+
 
         //Check for existence of question on DOM
         var $questionToLoad = $("#Q_" + currQIndex + "_div");
@@ -282,11 +285,14 @@ $(document).ready(function() {
         var uChoice = currQuestion.userChoice,
             checkedRadio;
 
+        //No user choice yet, default
         if (uChoice == -1) {
             checkedRadio = $("#radio" + currQIndex + "_0");
             checkedRadio.prop("checked", true);
             checkedRadio.focus();
-        } else {
+        }
+        //Load prev user choice
+        else {
             checkedRadio = $("#radio" + currQIndex + "_" + uChoice);
             checkedRadio.prop("checked", true);
             checkedRadio.focus();
