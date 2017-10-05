@@ -27,6 +27,16 @@ body {
     width: 70%;
 }
 
+.btn_clear {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 2px;
+    color: #f75d2a;
+}
+
+.btn_clear:hover {
+    color: #FECEA8;
+}
+
 .main_text {
     color: #f75d2a;
     text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
