@@ -2,7 +2,7 @@
 var allQuestions = [{
         questionText: "Which color is best?",
         name: "color",
-        choices: ["Red", "Green", "Blue", "Yellow", "Purple", "Black"],
+        choices: ["Red", "Orange", "Blue", "Yellow", "Purple", "Black"],
         correctAnswer: 1,
         userChoice: -1
     },
