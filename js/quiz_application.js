@@ -328,7 +328,8 @@ $(document).ready(function() {
      */
     function displayScore() {
         //Tallied score display construction
-        $("#display_score_text").text("Your score is " + tally);
+        $("#display_score_text").text("Your score is ");
+        $("#display_score_number").text(tally);
 
         $quizPanel.hide();
         $endingPanel.show();

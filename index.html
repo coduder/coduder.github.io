@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/stylesheet.css" />
@@ -33,9 +34,20 @@
                 </div>
             </div>
             <div class="col-sm-6 text-center" id="ending_panel">
-                <p>End</p>
-                <h1 id="display_score_text"></h1>
-                <button type="button" class="btn btn-primary btn-lg" id="restart_btn">Start Quiz Over</button>
+                <div class="row justify-content-center">
+                    <div class="col-sm-8 display_score">
+                        <span id="display_score_text"></span>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-sm-2 rounded display_score" id="display_score_number_container">
+                        <span id="display_score_number"></span>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <button type="button" class="btn btn-primary btn-lg" id="restart_btn">Start Quiz Over</button>
+                </div>
+
             </div>
         </div>
     </div>
