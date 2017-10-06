@@ -12,7 +12,7 @@ A CDN of the popper.js library is included at the bottom of the index.html body 
 
 ## Built With
 
-* [Javascrip]
+* [Javascript]
 * [Bootstrap] (https://getbootstrap.com/)
 * [JQuery] (http://jquery.com/) 
 
