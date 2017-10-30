@@ -7,14 +7,14 @@
 
 @font-face {
     font-family: 'quicksandregular';
-    src: url('quicksand-regular-webfont.woff2') format('woff2'), url('quicksand-regular-webfont.woff') format('woff');
+    src: url('../fonts/quicksand-regular-webfont.woff2') format('woff2'), url('../fonts/quicksand-regular-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'lobster_1.3regular';
-    src: url('lobster_1.3-webfont.woff2') format('woff2'), url('lobster_1.3-webfont.woff') format('woff');
+    src: url('../fonts/lobster_1.3-webfont.woff2') format('woff2'), url('../fonts/lobster_1.3-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -76,7 +76,7 @@ input {
 }
 
 .btn_clear {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.2);
     border-width: 2px;
     color: #f75d2a;
 }
@@ -88,7 +88,7 @@ input {
 .main_text {
     color: #f75d2a;
     text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white, 2px 2px 0 white;
-    font-family: "'lobster_1.3regular'", fantasy, cursive, Georgia, Bookman, Courier-New, Courier, monospace;
+    font-family: 'lobster_1.3regular', cursive, Georgia, Bookman, Courier-New, Courier, monospace;
 }
 
 .question_text {
