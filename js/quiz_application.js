@@ -173,7 +173,7 @@ $(document).ready(function() {
     }
 
     /**
-     * Constructs a div enclosing a questions main text and an <ul> of radio button selections.
+     * Constructs a div enclosing a questions main text and an <ol> of radio button selections.
      * 
      * @param {Object} currQuestion -Current question object to construct question div
      * @return {HTMLElement:div}            -the question div
@@ -186,28 +186,28 @@ $(document).ready(function() {
         DIV_question.classList.add("col"); //Boot strap col Sizing and styling
 
         //make question text
-        var P_questionText = document.createElement("p");
-        P_questionText.id = "Q_" + currQIndex + "_text";
-        P_questionText.classList.add("question_text");
-        P_questionText.classList.add("card-title"); //Bootstrap card title
-        P_questionText.innerHTML = currQuestion.questionText;
+        var h2_questionText = document.createElement("H2");
+        h2_questionText.id = "Q_" + currQIndex + "_text";
+        h2_questionText.classList.add("question_text");
+        h2_questionText.classList.add("card-title"); //Bootstrap card title
+        h2_questionText.innerHTML = currQuestion.questionText;
 
-        //make UL to store radio options
-        var UL_choices = document.createElement("ul");
-        UL_choices.id = "Q_" + currQIndex + "_choices";
-        UL_choices.classList.add("question_choices");
-        UL_choices.classList.add("list-group"); //Bootstrap
-        UL_choices.classList.add("list-group-flush"); //Bootstrap
+        //make OL to store radio options
+        var OL_choices = document.createElement("ol");
+        OL_choices.id = "Q_" + currQIndex + "_choices";
+        OL_choices.classList.add("question_choices");
+        OL_choices.classList.add("list-group"); //Bootstrap
+        OL_choices.classList.add("list-group-flush"); //Bootstrap
 
-        //populate UL with radio options
+        //populate OL with radio options
         for (var j = 0, len2 = currQuestion.choices.length; j < len2; j++) {
             var newInputChoice = makeQuestionChoice(currQIndex, j, true, "radio", currQuestion.choices[j], currQuestion.name);
-            UL_choices.appendChild(newInputChoice);
+            OL_choices.appendChild(newInputChoice);
         }
 
-        //append UL & text to div
-        DIV_question.appendChild(P_questionText);
-        DIV_question.appendChild(UL_choices);
+        //append OL & text to div
+        DIV_question.appendChild(h2_questionText);
+        DIV_question.appendChild(OL_choices);
 
         return DIV_question;
     }

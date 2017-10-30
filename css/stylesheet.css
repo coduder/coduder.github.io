@@ -1,8 +1,40 @@
+@font-face {
+    font-family: "Lobster";
+    src: url("http://fonts.googleapis.com/css?family=Lobster");
+}
+
+
 /*DOM OBJECTS*/
 
 body {
     background-color: #FECEA8;
 }
+
+
+/*Trying to style the user choices*
+/*\/\/\/\/\/\/\/\/\/\/*/
+
+
+/*
+li {
+    list-style-type: none;
+}
+
+ol>div:nth-of-type(even) {
+    background-color: #ccc;
+}
+
+div>input[type="radio"]:checked {
+    background-color: #5fc3e2;
+}
+
+input {
+    display: "hidden";
+}
+*/
+
+
+/*/\/\/\/\/\/\/\/\/\/\*/
 
 
 /*BOOTSTRAP CLASSES*/
